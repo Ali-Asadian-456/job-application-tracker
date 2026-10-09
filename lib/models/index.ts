@@ -1,8 +1,4 @@
-import "./board"
-import "./column"
-import "./job-application"
+import "./product"
 
-export {default as Board} from "./board"
-export {default as Column} from "./column"
-export {default as JobApplication} from "./job-application"
-
+export {default as Product} from "./product"
+export { default as CatalogState } from "./catalog-state";

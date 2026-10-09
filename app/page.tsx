@@ -1,89 +1,103 @@
-import ImageTabs from "@/components/image-tabs";
-import { buttonVariants } from "@/components/ui/button";
-import { ArrowRight, Briefcase, CheckCircle2, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { Box, Check, ChevronLeft } from "lucide-react";
+import { getPublicProducts } from "@/lib/catalog/products";
+import ProductExplorer from "@/components/product-explorer";
+import { getSession } from "@/lib/auth/auth";
+import { isAdminUser } from "@/lib/auth/roles";
 
-export default function Home() {
+function HeroStage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-32">
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-black mb-6 text-6xl font-bold">
-              A better way to track your job Application
-            </h1>
-            <p className="text-muted-foreground mb-10 text-xl">
-              capture organize and manage your job search in one place
-            </p>
-            <div className="flex flex-col items-center gap-4">
-              <Link
-                href="/sign-up"
-                className={buttonVariants({
-                  size: "lg",
-                  className: "rounded-md font-medium",
-                })}
-              >
-                Start for Free
-                <ArrowRight className="ml-1" />
-              </Link>
-
-              <p className="text-sm text-muted-foreground">
-                free for ever.no credit card requird
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Hero Images section with Tabs */}
-        <ImageTabs />
-
-
-        {/* Features section */}
-          <section className="border-t bg-white py-24">
-          <div className="container mx-auto px-4">
-            <div className="grid gap-12 md:grid-cols-3">
-              <div className="flex flex-col">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Briefcase className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="mb-3 text-2xl font-semibold text-black">
-                  Organize Applications
-                </h3>
-                <p className="text-muted-foreground">
-                  Create custom boards and columns to track your job
-                  applications at every stage of the process.
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <TrendingUp className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="mb-3 text-2xl font-semibold text-black">
-                  Track Progress
-                </h3>
-                <p className="text-muted-foreground">
-                  Monitor your application status from applied to interview to
-                  offer with visual Kanban boards.
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <CheckCircle2 className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="mb-3 text-2xl font-semibold text-black">
-                  Stay Organized
-                </h3>
-                <p className="text-muted-foreground">
-                  Never lose track of an application. Keep all your job search
-                  information in one centralized place.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </main>
+    <div className="hero-stage" aria-label="نمونه محصولات">
+      <div className="stage-orbit stage-orbit-one" />
+      <div className="stage-orbit stage-orbit-two" />
+      <div className="stage-card stage-card-a">
+        <span className="stage-mock stage-mock-lamp" />
+        <small>چراغ لوگویی</small>
+      </div>
+      <div className="stage-card stage-card-b">
+        <span className="stage-mock stage-mock-vase" />
+        <small>گلدان پارامتریک</small>
+      </div>
+      <div className="stage-card stage-card-c">
+        <span className="stage-mock stage-mock-dock" />
+        <small>داک کنترلر</small>
+      </div>
     </div>
+  );
+}
+
+export default async function Home() {
+  const [products, session] = await Promise.all([getPublicProducts(), getSession()]);
+  const adminHref = session?.user && isAdminUser(session.user) ? "/dashboard" : "#catalog";
+
+  return (
+    <main dir="rtl" className="tridium-page">
+      <section className="hero-shell">
+        <div className="hero-copy">
+          <span className="reference-eyebrow">نسخه آزمایشی دیسکاوری</span>
+          <h1 className="reference-h1">
+            چیزهایی که نمی‌دانستی
+            <br />
+            <span>می‌شود پیدا کرد.</span>
+          </h1>
+          <p className="reference-lede">
+            محصولاتی را ببین، ذخیره کن و وقتی خواستی بهترین انتخاب را پیدا کن.
+            لازم نیست از قبل بدانی دقیقا دنبال چه چیزی هستی.
+          </p>
+          <form action="#catalog" className="hero-search">
+            <input name="q" placeholder="مثلاً: برای میز کار، هدیه یا خانه..." />
+            <button type="submit">پیدا کن</button>
+          </form>
+          <div className="trust-row">
+            <span><Check /> انتخاب‌شده و کاربردی</span>
+            <span><Check /> بدون هزینه برای شروع</span>
+            <span><Check /> قابل کشف و مقایسه</span>
+          </div>
+        </div>
+        <HeroStage />
+      </section>
+
+      <section className="signal-strip">
+        <div className="signal-grid">
+          {[
+            ["ببین", "بدون اینکه از قبل بدانی چه می‌خواهی"],
+            ["جست‌وجو کن", "با چند کلمه به انتخاب مناسب برس"],
+            ["مقایسه کن", "قیمت، امتیاز و ویژگی‌ها را کنار هم ببین"],
+            ["انتخاب کن", "محصول مناسب را به سادگی پیدا کن"],
+          ].map(([title, text]) => (
+            <div key={title}><strong>{title}</strong><span>{text}</span></div>
+          ))}
+        </div>
+      </section>
+
+      <ProductExplorer products={products} />
+
+      <section className="reference-section reference-split" id="how">
+        <div>
+          <span className="reference-eyebrow">چطور کار می‌کند؟</span>
+          <h2>تو نیاز را می‌گویی. ما جزئیات انتخاب را ساده می‌کنیم.</h2>
+        </div>
+        <ol className="reference-steps">
+          {["یک چیز پیدا کن", "محصولات مشابه را ببین", "جزئیات و قیمت را مقایسه کن", "انتخاب مناسب را انجام بده"].map((item, index) => (
+            <li key={item}><span>۰{index + 1}</span><div><strong>{item}</strong><p>بدون پیچیدگی، با اطلاعاتی که برای تصمیم‌گیری لازم داری.</p></div></li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="maker-band">
+        <div>
+          <span className="reference-eyebrow light">یک محصول خوب داری؟</span>
+          <h2>جای محصول خوب در فید شلوغ گم نیست.</h2>
+          <p>محصولت را به ویترین دیسکاوری اضافه کن تا بیشتر دیده شود.</p>
+        </div>
+        <Link href={adminHref} className="light-button">رفتن به محصولات <ChevronLeft /></Link>
+      </section>
+
+      <footer className="reference-footer">
+        <Link href="/" className="footer-brand"><Box /> دیسکاوری</Link>
+        <span>محصولات خوب، ارزش دیده‌شدن دارند.</span>
+        <span>© ۲۰۲۶ دیسکاوری</span>
+      </footer>
+    </main>
   );
 }

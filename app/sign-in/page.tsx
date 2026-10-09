@@ -38,21 +38,21 @@ export default function SignIn() {
       if (result.error) {
         setError(result.error.message ?? "Failed to sign In");
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   }
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
-      <Card className="w-full max-w-sm">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-b from-slate-50 to-white p-4">
+      <Card className="w-full max-w-sm border-white/70 shadow-xl">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Welcome back</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Sign in to manage your saved account and admin workspace.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -77,12 +77,6 @@ export default function SignIn() {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
                 </div>
                 <Input
                  id="password" 
@@ -99,10 +93,10 @@ export default function SignIn() {
             </Button>
 
             <div className="flex gap-1">
-              <p>Don't have an account?</p>
+              <p>Don&apos;t have an account?</p>
               <CardAction>
                 <Link href="/sign-up" className="text-primary font-semibold ">
-                  SignUp
+                  Sign up
                 </Link>
               </CardAction>
             </div>

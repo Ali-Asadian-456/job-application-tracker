@@ -1,7 +1,6 @@
 "use client";
-import { Briefcase } from "lucide-react";
+import { Box, LayoutGrid } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,30 +11,43 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import SignOutBtn from "./sign-out-btn";
 import { useSession } from "@/lib/auth/auth-client";
+import { isAdminUser } from "@/lib/auth/roles";
 export default function Navbar() {
   const { data: session } = useSession();
   return (
-    <nav className="border-b  border-gray-200 bg-white">
-      <div className="container flex mx-auto  h-16 items-center px-4 justify-between">
+    <nav dir="rtl" className="reference-topbar">
+      <div className="reference-nav">
         <Link
           href="/"
-          className="flex gap-2 items-center text-xl font-semibold text-primary "
+          className="flex items-center gap-2 text-lg font-semibold text-slate-950"
         >
-          <Briefcase />
-          Job Tracker
+          <Box className="h-5 w-5 text-current" />
+          دیسکاوری
         </Link>
 
-        <div className="flex gap-2 items-center ">
+        <div className="reference-navlinks">
           {session?.user ? (
             <>
               <Link
-                href="/dashboard"
-                className={buttonVariants({
-                  variant: "ghost",
-                  className: "text-gray-700 hover:text-black",
-                })}
+                href="/"
+                className="reference-navlink"
               >
-                dashboard
+                محصولات
+              </Link>
+              {isAdminUser(session.user) ? (
+                <Link
+                  href="/dashboard"
+                  className="reference-navlink"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                  مدیریت
+                </Link>
+              ) : null}
+              <Link
+                href="/#catalog"
+                className="reference-navlink"
+              >
+                دسته‌بندی‌ها
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger
@@ -43,23 +55,25 @@ export default function Navbar() {
                   render={
                     <div className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       <Avatar>
-                        <AvatarImage
-                          src="https://github.com/evilrabbit.png"
-                          alt="@evilrabbit"
-                        />
-                        <AvatarFallback className="bg-primary text-white">
-                          {session.user.name?.charAt(0).toUpperCase() || "U"}
-                        </AvatarFallback>
+                          {session.user.image ? (
+                            <AvatarImage
+                              src={session.user.image}
+                              alt={session.user.name ?? "Account avatar"}
+                            />
+                          ) : null}
+                          <AvatarFallback className="bg-primary text-white">
+                            {session.user.name?.charAt(0).toUpperCase() || "U"}
+                          </AvatarFallback>
                       </Avatar>
                     </div>
                   }
                 />
-                <DropdownMenuContent >
+                <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>
                       <div>
-                        <p>{session?.user?.name}</p>
-                        <p>{session?.user?.email}</p>
+                        <p className="font-medium text-slate-950">{session?.user?.name}</p>
+                        <p className="text-xs text-slate-500">{session?.user?.email}</p>
                       </div>
                     </DropdownMenuLabel>
 
@@ -70,22 +84,11 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link
-                href="/sign-in"
-                className={buttonVariants({
-                  variant: "ghost",
-                  className: "text-gray-700 hover:text-black",
-                })}
-              >
-                Sign In
+              <Link href="/sign-in" className="reference-navlink">
+                ورود
               </Link>
-              <Link
-                href="/sign-up"
-                className={buttonVariants({
-                  className: "hover:bg-primary/90",
-                })}
-              >
-                Start For Free
+              <Link href="/sign-up" className="reference-nav-button">
+                ثبت‌نام
               </Link>
             </>
           )}

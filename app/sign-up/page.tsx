@@ -41,9 +41,9 @@ export default function SignUp() {
       if (result.error) {
         setError(result.error.message ?? "Failed to sign up");
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -51,12 +51,12 @@ export default function SignUp() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4.0625rem)] items-center justify-center bg-white p-4">
-      <Card className="w-full max-w-sm">
+    <div className="flex min-h-[calc(100vh-4.0625rem)] items-center justify-center bg-gradient-to-b from-slate-50 to-white p-4">
+      <Card className="w-full max-w-sm border-white/70 shadow-xl">
         <CardHeader>
-          <CardTitle>Sign up for an account</CardTitle>
+          <CardTitle>Create your account</CardTitle>
           <CardDescription>
-            Enter your email below to SignUp your account
+            Join the experience to save preferences and access your account.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -117,7 +117,7 @@ export default function SignUp() {
               <p>Already have an account?</p>
               <CardAction>
                 <Link href="/sign-in" className="text-primary font-semibold">
-                  Login
+                  Sign in
                 </Link>
               </CardAction>
             </div>

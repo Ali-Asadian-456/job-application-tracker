@@ -8,7 +8,7 @@ export default async function proxy(request: NextRequest) {
   const isSignUpPage = request.nextUrl.pathname.startsWith("/sign-up");
 
   if ((isSignInPage || isSignUpPage) && session?.user) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
