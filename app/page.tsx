@@ -1,5 +1,5 @@
 import ImageTabs from "@/components/image-tabs";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight, Briefcase, CheckCircle2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
@@ -17,11 +17,15 @@ export default function Home() {
               capture organize and manage your job search in one place
             </p>
             <div className="flex flex-col items-center gap-4">
-              <Link href="/sign-up" >
-                <Button size="lg" className=" rounded-md font-medium ">
-                  Start for Free
-                  <ArrowRight className="ml-1" />
-                </Button>
+              <Link
+                href="/sign-up"
+                className={buttonVariants({
+                  size: "lg",
+                  className: "rounded-md font-medium",
+                })}
+              >
+                Start for Free
+                <ArrowRight className="ml-1" />
               </Link>
 
               <p className="text-sm text-muted-foreground">

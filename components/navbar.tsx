@@ -1,13 +1,11 @@
 "use client";
 import { Briefcase } from "lucide-react";
 import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
-import { getSession } from "@/lib/auth/auth";
+import { buttonVariants } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
@@ -30,26 +28,32 @@ export default function Navbar() {
         <div className="flex gap-2 items-center ">
           {session?.user ? (
             <>
-              <Link href="/dashboard">
-                <Button
-                  variant="ghost"
-                  className="text-gray-700 hover:text-black"
-                >
-                  dashboard
-                </Button>
+              <Link
+                href="/dashboard"
+                className={buttonVariants({
+                  variant: "ghost",
+                  className: "text-gray-700 hover:text-black",
+                })}
+              >
+                dashboard
               </Link>
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
-                    <AvatarImage
-                      src="https://github.com/evilrabbit.png"
-                      alt="@evilrabbit"
-                    />
-                    <AvatarFallback className="bg-primary text-white">
-                      {session?.user?.name[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  nativeButton={false}
+                  render={
+                    <div className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                      <Avatar>
+                        <AvatarImage
+                          src="https://github.com/evilrabbit.png"
+                          alt="@evilrabbit"
+                        />
+                        <AvatarFallback className="bg-primary text-white">
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                  }
+                />
                 <DropdownMenuContent >
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>
@@ -66,16 +70,22 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/sign-in" className="Log in">
-                <Button
-                  variant="ghost"
-                  className="text-gray-700 hover:text-black "
-                >
-                  Sign In
-                </Button>
+              <Link
+                href="/sign-in"
+                className={buttonVariants({
+                  variant: "ghost",
+                  className: "text-gray-700 hover:text-black",
+                })}
+              >
+                Sign In
               </Link>
-              <Link href="/sign-up" className="Sign-up">
-                <Button className=" hover:bg-primary/90">Start For Free</Button>
+              <Link
+                href="/sign-up"
+                className={buttonVariants({
+                  className: "hover:bg-primary/90",
+                })}
+              >
+                Start For Free
               </Link>
             </>
           )}
