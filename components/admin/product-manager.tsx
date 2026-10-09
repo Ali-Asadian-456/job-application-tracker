@@ -42,6 +42,9 @@ function ProductEditorDialog({
     success: false,
   });
   const initialValues = useMemo(() => toProductFormValues(product ?? undefined), [product]);
+  const [imageUrl, setImageUrl] = useState(initialValues.imageUrl);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (state.success) {
@@ -107,14 +110,42 @@ function ProductEditorDialog({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="imageUrl">آدرس تصویر</Label>
+            <Label htmlFor="imageFile">تصویر محصول</Label>
+            <input type="hidden" name="imageUrl" value={imageUrl} />
             <Input
-              id="imageUrl"
-              name="imageUrl"
-              type="url"
-              defaultValue={initialValues.imageUrl}
-              required
+              id="imageFile"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              disabled={uploading}
+              onChange={async (event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                setUploadError(null);
+                setUploading(true);
+                try {
+                  const uploadData = new FormData();
+                  uploadData.append("file", file);
+                  const response = await fetch("/api/uploads", {
+                    method: "POST",
+                    body: uploadData,
+                  });
+                  const result = (await response.json()) as { url?: string; error?: string };
+                  if (!response.ok || !result.url) {
+                    throw new Error(result.error ?? "آپلود تصویر ناموفق بود.");
+                  }
+                  setImageUrl(result.url);
+                } catch (error) {
+                  setUploadError(error instanceof Error ? error.message : "آپلود تصویر ناموفق بود.");
+                } finally {
+                  setUploading(false);
+                }
+              }}
+              required={!imageUrl}
             />
+            <p className="text-xs text-slate-500">
+              {uploading ? "در حال آپلود..." : imageUrl ? `تصویر انتخاب‌شده: ${imageUrl}` : "حداکثر ۵ مگابایت"}
+            </p>
+            {uploadError ? <p role="alert" className="text-xs text-red-600">{uploadError}</p> : null}
           </div>
 
           <div className="grid gap-2">
@@ -207,7 +238,7 @@ function ProductEditorDialog({
             >
               لغو
             </Button>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || uploading}>
               {pending ? "در حال ذخیره..." : "ذخیره محصول"}
             </Button>
           </DialogFooter>

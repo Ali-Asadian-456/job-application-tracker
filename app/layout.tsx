@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Discoverly",
-  description: "A polished product-discovery experience with admin-managed collections.",
+  title: "تری‌دیوم",
+  description: "چیزهایی که میشود ساخت",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

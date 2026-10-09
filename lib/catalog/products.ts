@@ -189,6 +189,10 @@ export async function ensureProductSeed() {
 }
 
 export function isValidHttpsImageUrl(value: string) {
+  if (/^\/img\/[a-zA-Z0-9._-]+$/.test(value)) {
+    return true;
+  }
+
   try {
     const url = new URL(value);
     return url.protocol === "https:" && Boolean(url.hostname);

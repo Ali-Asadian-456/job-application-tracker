@@ -34,7 +34,7 @@ export default async function Home() {
     <main dir="rtl" className="tridium-page">
       <section className="hero-shell">
         <div className="hero-copy">
-          <span className="reference-eyebrow">نسخه آزمایشی دیسکاوری</span>
+          <span className="reference-eyebrow">نسخه آزمایشی تری‌دیوم</span>
           <h1 className="reference-h1">
             چیزهایی که نمی‌دانستی
             <br />
@@ -88,15 +88,15 @@ export default async function Home() {
         <div>
           <span className="reference-eyebrow light">یک محصول خوب داری؟</span>
           <h2>جای محصول خوب در فید شلوغ گم نیست.</h2>
-          <p>محصولت را به ویترین دیسکاوری اضافه کن تا بیشتر دیده شود.</p>
+          <p>محصولت را به ویترین تری‌دیوم اضافه کن تا بیشتر دیده شود.</p>
         </div>
         <Link href={adminHref} className="light-button">رفتن به محصولات <ChevronLeft /></Link>
       </section>
 
       <footer className="reference-footer">
-        <Link href="/" className="footer-brand"><Box /> دیسکاوری</Link>
+        <Link href="/" className="footer-brand"><Box /> تری‌دیوم</Link>
         <span>محصولات خوب، ارزش دیده‌شدن دارند.</span>
-        <span>© ۲۰۲۶ دیسکاوری</span>
+        <span>© ۲۰۲۶ تری‌دیوم</span>
       </footer>
     </main>
   );
