@@ -108,12 +108,13 @@ export async function saveProduct(
 
     const productId = readTextValue(formData, "productId");
     const title = readTextValue(formData, "title");
+    const slugValue = readTextValue(formData, "slug");
     const category = readTextValue(formData, "category");
     const description = readTextValue(formData, "description");
     const imageUrl = readTextValue(formData, "imageUrl");
 
-    if (!title || !category || !description || !imageUrl) {
-      return { error: "Title, category, description, and image URL are required." };
+    if (!title || !slugValue || !category || !description || !imageUrl) {
+      return { error: "Title, slug, category, description, and image URL are required." };
     }
 
     if (!isValidHttpsImageUrl(imageUrl)) {
@@ -148,7 +149,10 @@ export async function saveProduct(
     const isFeatured = formData.get("isFeatured") === "on";
     const isActive = formData.get("isActive") !== null;
 
-    const baseSlug = slugify(title);
+    const baseSlug = slugify(slugValue);
+    if (!baseSlug) {
+      return { error: "Slug must contain English letters or numbers." };
+    }
     if (productId && !mongoose.Types.ObjectId.isValid(productId)) {
       return { error: "The selected product is invalid." };
     }

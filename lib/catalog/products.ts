@@ -175,6 +175,15 @@ export async function getPublicProducts() {
   return products.map(normalizeProduct);
 }
 
+export async function getPublicProductBySlug(slug: string) {
+  await ensureSeedProducts();
+  const product = (await Product.findOne({ slug, isActive: true }).lean()) as
+    | Parameters<typeof normalizeProduct>[0]
+    | null;
+
+  return product ? normalizeProduct(product) : null;
+}
+
 export async function getAdminProducts() {
   await ensureSeedProducts();
   const products = (await Product.find()

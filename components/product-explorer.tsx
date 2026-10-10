@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Search, Star } from "lucide-react";
+import { Search, Star } from "lucide-react";
 import { CatalogProduct, formatProductPrice } from "@/lib/catalog/shared";
 
 interface ProductExplorerProps { products: CatalogProduct[]; }
@@ -64,7 +65,7 @@ export default function ProductExplorer({ products }: ProductExplorerProps) {
               <div className="product-meta"><span>محصول منتخب</span><em><Star /> {product.rating.toFixed(1)}</em></div>
               <h3>{product.title}</h3>
               <p>{product.description}</p>
-              <div className="product-footer"><strong>{formatProductPrice(product.priceCents)}</strong><button type="button">مشاهده <ArrowLeft /></button></div>
+              <div className="flex flex-col justify-center items-center gap-4"><strong>{formatProductPrice(product.priceCents)}</strong><Link className="border w-full text-center p-3 bg-gray-100 rounded-2xl" href={`/product/${product.slug}`}>دیدن جزئیات</Link></div>
             </div>
           </article>
         ))}

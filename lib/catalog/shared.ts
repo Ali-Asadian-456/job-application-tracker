@@ -26,6 +26,7 @@ export function formatProductPrice(priceCents: number) {
 export function toProductFormValues(product?: CatalogProduct) {
   return {
     title: product?.title ?? "",
+    slug: product?.slug ?? "",
     category: product?.category ?? "",
     description: product?.description ?? "",
     priceCents: product ? String(product.priceCents) : "",

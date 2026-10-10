@@ -78,9 +78,22 @@ function ProductEditorDialog({
               <Input id="title" name="title" defaultValue={initialValues.title} required />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="category">دسته‌بندی</Label>
-              <Input id="category" name="category" defaultValue={initialValues.category} required />
+              <Label htmlFor="slug">شناسه محصول (slug)</Label>
+              <Input
+                id="slug"
+                name="slug"
+                defaultValue={initialValues.slug}
+                placeholder="مثلاً astra-desk-lamp"
+                pattern="[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*"
+                title="فقط حروف انگلیسی، عدد و خط تیره وارد کنید."
+                required
+              />
             </div>
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="category">دسته‌بندی</Label>
+            <Input id="category" name="category" defaultValue={initialValues.category} required />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
