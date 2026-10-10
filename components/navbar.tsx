@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
@@ -25,28 +26,13 @@ export default function Navbar() {
           تری‌دیوم
         </Link>
 
-        <div className="reference-navlinks">
+        <div className="reference-navlinks  font-semibold">
           {session?.user ? (
             <>
-              <Link
-                href="/"
-                className="reference-navlink"
-              >
+              <Link href="/#catalog" className="reference-navlink ">
                 محصولات
               </Link>
-              {isAdminUser(session.user) ? (
-                <Link
-                  href="/dashboard"
-                  className="reference-navlink"
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                  مدیریت
-                </Link>
-              ) : null}
-              <Link
-                href="/#catalog"
-                className="reference-navlink"
-              >
+              <Link href="/#catalog" className="reference-navlink">
                 دسته‌بندی‌ها
               </Link>
               <DropdownMenu>
@@ -55,15 +41,15 @@ export default function Navbar() {
                   render={
                     <div className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
                       <Avatar>
-                          {session.user.image ? (
-                            <AvatarImage
-                              src={session.user.image}
-                              alt={session.user.name ?? "Account avatar"}
-                            />
-                          ) : null}
-                          <AvatarFallback className="bg-primary text-white">
-                            {session.user.name?.charAt(0).toUpperCase() || "U"}
-                          </AvatarFallback>
+                        {session.user.image ? (
+                          <AvatarImage
+                            src={session.user.image}
+                            alt={session.user.name ?? "Account avatar"}
+                          />
+                        ) : null}
+                        <AvatarFallback className="bg-primary text-white">
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
+                        </AvatarFallback>
                       </Avatar>
                     </div>
                   }
@@ -72,10 +58,23 @@ export default function Navbar() {
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>
                       <div>
-                        <p className="font-medium text-slate-950">{session?.user?.name}</p>
-                        <p className="text-xs text-slate-500">{session?.user?.email}</p>
+                        <p className="font-medium text-slate-950">
+                          {session?.user?.name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {session?.user?.email}
+                        </p>
                       </div>
                     </DropdownMenuLabel>
+                     <DropdownMenuItem>
+                    {isAdminUser(session.user) ? (
+                      <Link href="/dashboard" className="flex items-center gap-1">
+                        {/* <LayoutGrid className="h-4 w-4" /> */}
+                        مدیریت
+                      </Link>
+                    ) : null}
+                     </DropdownMenuItem>
+
 
                     <SignOutBtn />
                   </DropdownMenuGroup>

@@ -141,7 +141,7 @@
     .reference-nav { display: flex; height: 64px; max-width: 1180px; margin: 0 auto; padding: 0 24px; align-items: center; justify-content: space-between; }
     .reference-nav > a { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 900; color: #111216; }
     .reference-navlinks { display: flex; align-items: center; gap: 22px; }
-    .reference-navlink { display: inline-flex; align-items: center; gap: 6px; color: #77747a; font-size: 12px; transition: color .2s ease; }
+    .reference-navlink { display: inline-flex; align-items: center; gap: 6px; color: #49474a; font-size: 12px; transition: color .2s ease; }
     .reference-navlink:hover { color: #111216; }
     .reference-nav-button { border: 1px solid #d8d4ce; border-radius: 999px; padding: 9px 15px; color: #111216; font-size: 12px; background: #fffefa; }
     .hero-shell, .reference-section { max-width: 1180px; margin: 0 auto; padding-inline: 24px; }

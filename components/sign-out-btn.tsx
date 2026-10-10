@@ -17,7 +17,7 @@ export default function SignOutBtn() {
         }
       }}
     >
-      Log out
+      خروج
     </DropdownMenuItem>
   );
 }
