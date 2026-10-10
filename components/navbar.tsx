@@ -66,14 +66,14 @@ export default function Navbar() {
                         </p>
                       </div>
                     </DropdownMenuLabel>
-                     <DropdownMenuItem>
                     {isAdminUser(session.user) ? (
+                     <DropdownMenuItem>
                       <Link href="/dashboard" className="flex items-center gap-1">
                         {/* <LayoutGrid className="h-4 w-4" /> */}
                         مدیریت
                       </Link>
-                    ) : null}
-                     </DropdownMenuItem>
+                    </DropdownMenuItem>): null}
+                     
 
 
                     <SignOutBtn />
