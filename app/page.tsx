@@ -5,6 +5,8 @@ import ProductExplorer from "@/components/product-explorer";
 import { getSession } from "@/lib/auth/auth";
 import { isAdminUser } from "@/lib/auth/roles";
 
+export const instant = false;
+
 function HeroStage() {
   return (
     <div className="hero-stage" aria-label="نمونه محصولات">

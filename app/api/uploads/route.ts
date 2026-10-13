@@ -5,8 +5,6 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/auth";
 import { isAdminUser } from "@/lib/auth/roles";
 
-export const runtime = "nodejs";
-
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MIME_EXTENSIONS: Record<string, string> = {
   "image/jpeg": ".jpg",

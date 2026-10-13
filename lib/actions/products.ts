@@ -1,7 +1,7 @@
 "use server";
 
 import mongoose from "mongoose";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getSession } from "@/lib/auth/auth";
 import { isAdminUser } from "@/lib/auth/roles";
 import connectDB from "@/lib/db";
@@ -190,6 +190,7 @@ export async function saveProduct(
 
     revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidateTag("products", "max");
 
     return { success: true, error: null };
   } catch (error) {
@@ -220,5 +221,6 @@ export async function deleteProduct(productId: string) {
 
   revalidatePath("/");
   revalidatePath("/dashboard");
+  revalidateTag("products", "max");
   return { error: null };
 }

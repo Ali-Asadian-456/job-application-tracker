@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { formatProductPrice, type CatalogProduct } from "@/lib/catalog/shared";
 import { getPublicProductBySlug } from "@/lib/catalog/products";
 
+export const instant = false;
+
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };

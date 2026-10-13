@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import mongoose from "mongoose";
 import { ArrowLeft, Box, Check, Sparkles, Star } from "lucide-react";
+import { cacheLife, cacheTag } from "next/cache";
 import connectDB from "@/lib/db";
+
+export const instant = false;
 
 const PAGE_SIZE = 12;
 
@@ -40,6 +43,11 @@ export const metadata = {
 };
 
 async function getProvidersPage(pageParam?: string) {
+  "use cache";
+
+  cacheLife("hours");
+  cacheTag("providers");
+
   await connectDB();
 
   const db = mongoose.connection.db;
