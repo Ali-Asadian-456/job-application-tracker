@@ -16,6 +16,8 @@ function ProviderDialog({ open, onOpenChange, provider }: { open: boolean; onOpe
   const router = useRouter();
   const [state, action, pending] = useActionState(saveProvider, { error: null, success: false });
   const [avatarUrl, setAvatarUrl] = useState(provider?.avatar ?? "");
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   useEffect(() => {
     if (state.success) {
       router.refresh();
@@ -45,16 +47,43 @@ function ProviderDialog({ open, onOpenChange, provider }: { open: boolean; onOpe
           </div>
           <div className="grid gap-2"><Label htmlFor="originalUrl">لینک نماینده</Label><Input id="originalUrl" name="originalUrl" type="url" defaultValue={provider?.originalUrl} /></div>
           <div className="grid gap-2">
-            <Label htmlFor="avatar">لینک تصویر</Label>
+            <Label htmlFor="avatar">تصویر نماینده</Label>
+            <input type="hidden" name="avatar" value={avatarUrl} />
             <div className="flex items-center gap-4">
-              <Input
-                id="avatar"
-                name="avatar"
-                type="url"
-                value={avatarUrl}
-                onChange={(event) => setAvatarUrl(event.target.value)}
-                placeholder="https://example.com/image.jpg"
-              />
+              <div className="min-w-0 flex-1">
+                <Input
+                  id="avatar"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  disabled={uploading}
+                  onChange={async (event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    setUploadError(null);
+                    setUploading(true);
+                    try {
+                      const uploadData = new FormData();
+                      uploadData.append("file", file);
+                      const response = await fetch("/api/uploads", {
+                        method: "POST",
+                        body: uploadData,
+                      });
+                      const result = (await response.json()) as { url?: string; error?: string };
+                      if (!response.ok || !result.url) {
+                        throw new Error(result.error ?? "آپلود تصویر ناموفق بود.");
+                      }
+                      setAvatarUrl(result.url);
+                    } catch (error) {
+                      setUploadError(error instanceof Error ? error.message : "آپلود تصویر ناموفق بود.");
+                    } finally {
+                      setUploading(false);
+                    }
+                  }}
+                />
+                <p className="mt-2 text-xs text-slate-500">
+                  {uploading ? "در حال آپلود..." : "فرمت‌های JPG، PNG، WEBP یا GIF؛ حداکثر ۵ مگابایت"}
+                </p>
+              </div>
               <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
                 {avatarUrl ? (
                   <Image
@@ -70,9 +99,10 @@ function ProviderDialog({ open, onOpenChange, provider }: { open: boolean; onOpe
                 )}
               </div>
             </div>
+            {uploadError ? <p role="alert" className="text-xs text-red-600">{uploadError}</p> : null}
           </div>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="starred" defaultChecked={provider?.starred} /> نماینده منتخب</label>
-          <DialogFooter><Button type="button" variant="outline" onClick={() => onOpenChange(false)}>لغو</Button><Button type="submit" disabled={pending}>{pending ? "در حال ذخیره..." : "ذخیره نماینده"}</Button></DialogFooter>
+          <DialogFooter><Button type="button" variant="outline" onClick={() => onOpenChange(false)}>لغو</Button><Button type="submit" disabled={pending || uploading}>{pending ? "در حال ذخیره..." : "ذخیره نماینده"}</Button></DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

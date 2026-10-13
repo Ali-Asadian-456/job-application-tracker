@@ -20,14 +20,20 @@ function Section({
   children: React.ReactNode;
   onOpen: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <details
-      className="group rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm transition-colors open:border-slate-300 open:bg-white"
-      onToggle={(event) => {
-        if (event.currentTarget.open) onOpen();
-      }}
-    >
-      <summary className="cursor-pointer list-none text-lg font-semibold text-slate-950 [&::-webkit-details-marker]:hidden">
+    <section className={`group rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm transition-colors ${open ? "border-slate-300 bg-white" : ""}`}>
+      <button
+        type="button"
+        className="w-full cursor-pointer text-right text-lg font-semibold text-slate-950"
+        onClick={() => {
+          const nextOpen = !open;
+          setOpen(nextOpen);
+          if (nextOpen) onOpen();
+        }}
+        aria-expanded={open}
+      >
         <span className="flex items-center justify-between gap-4">
           <span className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -35,11 +41,11 @@ function Section({
             </span>
             <span>{title}</span>
           </span>
-          <ChevronDown className="h-5 w-5 text-slate-400 transition-transform group-open:rotate-180" />
+          <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform ${open ? "rotate-180" : ""}`} />
         </span>
-      </summary>
-      <div className="mt-5 border-t border-slate-100 pt-5">{children}</div>
-    </details>
+      </button>
+      {open ? <div className="mt-5 border-t border-slate-100 pt-5">{children}</div> : null}
+    </section>
   );
 }
 
