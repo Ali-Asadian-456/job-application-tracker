@@ -1,5 +1,5 @@
 "use client";
-import { Box, LayoutGrid } from "lucide-react";
+import { Box } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -27,6 +27,9 @@ export default function Navbar() {
         </Link>
 
         <div className="reference-navlinks  font-semibold">
+          <Link href="/providers" className="reference-nav-button">
+            ارائه‌دهندگان خدمات
+          </Link>
           {session?.user ? (
             <>
               <Link href="/#catalog" className="reference-navlink ">
