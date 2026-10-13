@@ -30,7 +30,7 @@ function HeroStage() {
 
 export default async function Home() {
   const [products, session] = await Promise.all([getPublicProducts(), getSession()]);
-  const adminHref = session?.user && isAdminUser(session.user) ? "/dashboard" : "#catalog";
+  const adminHref = session?.user && isAdminUser(session.user) ? "/management" : "#catalog";
 
   return (
     <main dir="rtl" className="tridium-page">

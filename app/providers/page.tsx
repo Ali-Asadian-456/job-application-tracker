@@ -25,6 +25,7 @@ function normalizeProvider(raw: Record<string, unknown>) {
     id: String(raw._id?.toString?.() ?? raw.id ?? username),
     name: username,
     category: tags[0] || "خدمات تخصصی",
+    tags,
     description: typeof raw.notes === "string" && raw.notes ? raw.notes : tags.join(" • ") || "ارائه‌کننده خدمات با تجربه و تخصص بالا.",
     initials: username.slice(0, 2).toUpperCase(),
     avatar: typeof raw.avatar === "string" ? raw.avatar : "",
@@ -42,7 +43,7 @@ export const metadata = {
   description: "ارائه‌دهندگان خدمات خلاق و متخصص را در تری‌دیوم پیدا کنید.",
 };
 
-async function getProvidersPage(pageParam?: string) {
+async function getProvidersPage(pageParam?: string, selectedTag?: string) {
   "use cache";
 
   cacheLife("hours");
@@ -52,17 +53,22 @@ async function getProvidersPage(pageParam?: string) {
 
   const db = mongoose.connection.db;
   if (!db) {
-    return { items: [], total: 0, page: 1, totalPages: 1 };
+    return { items: [], total: 0, page: 1, totalPages: 1, availableTags: [] };
   }
 
   const page = Math.max(1, Number(pageParam) || 1);
   const collection = db.collection("providers");
-  const total = await collection.countDocuments();
+  const availableTags = (await collection.distinct("tags"))
+    .filter((tag): tag is string => typeof tag === "string" && Boolean(tag.trim()))
+    .map((tag) => tag.trim())
+    .sort((a, b) => a.localeCompare(b, "fa"));
+  const filter = selectedTag ? { tags: selectedTag } : {};
+  const total = await collection.countDocuments(filter);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
 
   const docs = await collection
-    .find({})
+    .find(filter)
     .sort({ starred: -1, followers: -1, username: 1 })
     .skip((safePage - 1) * PAGE_SIZE)
     .limit(PAGE_SIZE)
@@ -73,17 +79,22 @@ async function getProvidersPage(pageParam?: string) {
     total,
     page: safePage,
     totalPages,
+    availableTags,
   };
 }
 
 export default async function ProvidersPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ page?: string }> | { page?: string };
+  searchParams?: Promise<{ page?: string; tag?: string }> | { page?: string; tag?: string };
 }) {
   const resolvedParams = await Promise.resolve(searchParams ?? {});
   const currentPage = Number(resolvedParams.page) || 1;
-  const { items, total, page, totalPages } = await getProvidersPage(String(currentPage));
+  const selectedTag = typeof resolvedParams.tag === "string" ? resolvedParams.tag.trim() : "";
+  const { items, total, page, totalPages, availableTags } = await getProvidersPage(
+    String(currentPage),
+    selectedTag,
+  );
 
   return (
     <main dir="rtl" className="tridium-page">
@@ -149,6 +160,32 @@ export default async function ProvidersPage({
             <span className="reference-eyebrow">پیشنهادهای این هفته</span>
             <h2>آدم‌های پشت ایده‌های خوب</h2>
           </div>
+
+          <form action="/providers" className="mt-8 flex flex-wrap items-end gap-3">
+            <label className="grid gap-2 text-sm text-[#66626a]">
+              فیلتر بر اساس تگ
+              <select
+                name="tag"
+                defaultValue={selectedTag}
+                className="min-w-52 rounded-full border border-[#d8d4ce] bg-white px-4 py-2.5 text-sm text-[#111216] outline-none focus:border-[#6957ff]"
+              >
+                <option value="">همه تگ‌ها</option>
+                {availableTags.map((tag) => (
+                  <option key={tag} value={tag}>
+                    {tag}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button type="submit" className="light-button bg-[#111216] text-white">
+              اعمال فیلتر
+            </button>
+            {selectedTag ? (
+              <Link href="/providers" className="reference-nav-button">
+                حذف فیلتر
+              </Link>
+            ) : null}
+          </form>
           <p className="max-w-xs text-xs leading-7 text-[#858188]">
             {total > 0 ? `${total.toLocaleString("fa-IR")} ارائه‌دهنده در مجموعه ثبت شده‌اند.` : "با متخصصانی آشنا شو که برای ساختن چیزهای متفاوت آماده‌اند."}
           </p>
@@ -203,7 +240,11 @@ export default async function ProvidersPage({
             {totalPages > 1 ? (
               <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
                 <Link
-                  href={page > 1 ? `/providers?page=${page - 1}` : "/providers"}
+                  href={page > 1
+                    ? `/providers?page=${page - 1}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ""}`
+                    : selectedTag
+                      ? `/providers?tag=${encodeURIComponent(selectedTag)}`
+                      : "/providers"}
                   className={`rounded-full border px-3 py-2 text-xs ${page === 1 ? "pointer-events-none opacity-40" : "border-[#d8d4ce] bg-white text-[#111216]"}`}
                 >
                   قبلی
@@ -212,7 +253,7 @@ export default async function ProvidersPage({
                 {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
                   <Link
                     key={pageNumber}
-                    href={`/providers?page=${pageNumber}`}
+                    href={`/providers?page=${pageNumber}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ""}`}
                     className={`rounded-full px-3 py-2 text-xs ${pageNumber === page ? "bg-[#111216] text-white" : "border border-[#d8d4ce] bg-white text-[#111216]"}`}
                   >
                     {pageNumber}
@@ -220,7 +261,7 @@ export default async function ProvidersPage({
                 ))}
 
                 <Link
-                  href={page < totalPages ? `/providers?page=${page + 1}` : `/providers?page=${totalPages}`}
+                  href={`${page < totalPages ? `/providers?page=${page + 1}` : `/providers?page=${totalPages}`}${selectedTag ? `&tag=${encodeURIComponent(selectedTag)}` : ""}`}
                   className={`rounded-full border px-3 py-2 text-xs ${page === totalPages ? "pointer-events-none opacity-40" : "border-[#d8d4ce] bg-white text-[#111216]"}`}
                 >
                   بعدی

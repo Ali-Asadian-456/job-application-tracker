@@ -6,6 +6,7 @@ import { getSession } from "@/lib/auth/auth";
 import { isAdminUser } from "@/lib/auth/roles";
 import connectDB from "@/lib/db";
 import { Product } from "@/lib/models";
+import { getAdminProducts } from "@/lib/catalog/products";
 import {
   isValidHttpsImageUrl,
   slugify,
@@ -70,6 +71,21 @@ async function requireAdmin() {
   }
 
   return session;
+}
+
+export async function loadAdminProducts() {
+  if (!(await requireAdmin())) {
+    return { products: [], error: "شما اجازه مدیریت محصولات را ندارید." };
+  }
+
+  try {
+    return { products: await getAdminProducts(), error: null };
+  } catch (error) {
+    return {
+      products: [],
+      error: error instanceof Error ? error.message : "دریافت محصولات ناموفق بود.",
+    };
+  }
 }
 
 async function buildUniqueSlug(baseSlug: string, productId?: string) {
@@ -189,7 +205,7 @@ export async function saveProduct(
     }
 
     revalidatePath("/");
-    revalidatePath("/dashboard");
+    revalidatePath("/management");
     revalidateTag("products", "max");
 
     return { success: true, error: null };
@@ -220,7 +236,7 @@ export async function deleteProduct(productId: string) {
   }
 
   revalidatePath("/");
-  revalidatePath("/dashboard");
+  revalidatePath("/management");
   revalidateTag("products", "max");
   return { error: null };
 }
