@@ -39,8 +39,8 @@ function normalizeProvider(raw: Record<string, unknown>) {
 }
 
 export const metadata = {
-  title: "ارائه‌دهندگان خدمات | تری‌دیوم",
-  description: "ارائه‌دهندگان خدمات خلاق و متخصص را در تری‌دیوم پیدا کنید.",
+  title: "ارائه‌دهندگان خدمات | تری‌دیم",
+  description: "ارائه‌دهندگان خدمات خلاق و متخصص را در تری‌دیم پیدا کنید.",
 };
 
 async function getProvidersPage(pageParam?: string, selectedTag?: string) {
@@ -102,7 +102,7 @@ export default async function ProvidersPage({
         <div className="max-w-xl">
           <span className="reference-eyebrow">
             <Sparkles className="ml-1 h-3.5 w-3.5 text-[#6957ff]" />
-            شبکه‌ی متخصصان تری‌دیوم
+            شبکه‌ی متخصصان تری‌دیم
           </span>
           <h1 className="reference-h1 mt-6">
             برای هر ایده،
@@ -290,10 +290,10 @@ export default async function ProvidersPage({
 
       <footer className="reference-footer">
         <Link href="/" className="footer-brand">
-          <Box /> تری‌دیوم
+          <Box /> تری‌دیم
         </Link>
         <span>آدم‌های خوب، ایده‌های خوب را می‌سازند.</span>
-        <span>© ۲۰۲۶ تری‌دیوم</span>
+        <span>© ۲۰۲۶ تری‌دیم</span>
       </footer>
     </main>
   );

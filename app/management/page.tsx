@@ -14,7 +14,7 @@ export default async function ManagementPage() {
       <div className="mx-auto max-w-7xl space-y-14 px-6 py-10">
         <div className="flex flex-col gap-3">
           <p className="text-sm font-medium tracking-[0.3em] text-primary">پنل مدیریت</p>
-          <h1 className="text-3xl font-semibold text-slate-950">مدیریت تری‌دیوم</h1>
+          <h1 className="text-3xl font-semibold text-slate-950">مدیریت تری‌دیم</h1>
           <p className="max-w-2xl text-slate-600">محصولات و نمایندگان خدمات را از یکجا مدیریت کن.</p>
         </div>
         <ManagementSections />

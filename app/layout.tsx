@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "تری‌دیوم",
+  title: "تری‌دیم",
   description: "چیزهایی که میشود ساخت",
 };
 

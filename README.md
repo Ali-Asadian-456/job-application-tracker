@@ -1,4 +1,4 @@
-# تری‌دیوم
+# تری‌دیم
 
 A polished product-discovery site built with Next.js, MongoDB, Mongoose, and Better Auth.
 
