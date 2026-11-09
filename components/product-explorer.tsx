@@ -49,7 +49,7 @@ export default function ProductExplorer({ products }: ProductExplorerProps) {
         {/* <span className="reference-eyebrow">منتخب برای شروع</span> */}
         <h3>چیزهایی که ارزش دیدن دارند</h3>
       </div>
-      <div className="reference-product-grid" >
+      <div className="reference-product-grid-home" >
         {filtered.map((product, index) => (
           <article key={product._id} className="reference-product-card">
             <div className={`reference-product-art ${artColors[index % artColors.length]} ${index % 3 === 0 ? "ring-art" : ""}`}>
