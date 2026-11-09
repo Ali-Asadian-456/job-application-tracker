@@ -136,17 +136,36 @@ function ProductEditorDialog({
                 setUploadError(null);
                 setUploading(true);
                 try {
-                  const uploadData = new FormData();
-                  uploadData.append("file", file);
+                  // ۱. دریافت لینک آپلود موقت از سرور
                   const response = await fetch("/api/uploads", {
                     method: "POST",
-                    body: uploadData,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      filename: file.name,
+                      contentType: file.type,
+                    }),
                   });
-                  const result = (await response.json()) as { url?: string; error?: string };
-                  if (!response.ok || !result.url) {
-                    throw new Error(result.error ?? "آپلود تصویر ناموفق بود.");
+                  const result = (await response.json()) as {
+                    signedUrl?: string;
+                    publicFileUrl?: string;
+                    error?: string;
+                  };
+                  if (!response.ok || !result.signedUrl || !result.publicFileUrl) {
+                    throw new Error(result.error ?? "دریافت لینک آپلود ناموفق بود.");
                   }
-                  setImageUrl(result.url);
+
+                  // ۲. آپلود مستقیم فایل از مرورگر به کلودفلر R2
+                  const uploadRes = await fetch(result.signedUrl, {
+                    method: "PUT",
+                    headers: { "Content-Type": file.type },
+                    body: file,
+                  });
+
+                  if (!uploadRes.ok) {
+                    throw new Error("خطا در ارسال مستقیم تصویر به کلودفلر.");
+                  }
+
+                  setImageUrl(result.publicFileUrl);
                 } catch (error) {
                   setUploadError(error instanceof Error ? error.message : "آپلود تصویر ناموفق بود.");
                 } finally {
@@ -156,7 +175,7 @@ function ProductEditorDialog({
               required={!imageUrl}
             />
             <p className="text-xs text-slate-500">
-              {uploading ? "در حال آپلود..." : imageUrl ? `تصویر انتخاب‌شده: ${imageUrl}` : "حداکثر ۵ مگابایت"}
+              {uploading ? "در حال آپلود مستقیم به کلودفلر..." : imageUrl ? `تصویر انتخاب‌شده: ${imageUrl}` : "حداکثر ۲۰ مگابایت"}
             </p>
             {uploadError ? <p role="alert" className="text-xs text-red-600">{uploadError}</p> : null}
           </div>

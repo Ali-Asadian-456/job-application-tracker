@@ -1,49 +1,35 @@
-import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/auth";
-import { isAdminUser } from "@/lib/auth/roles";
+import { NextRequest, NextResponse } from "next/server";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { r2 } from "@/lib/r2";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const MIME_EXTENSIONS: Record<string, string> = {
-  "image/jpeg": ".jpg",
-  "image/png": ".png",
-  "image/webp": ".webp",
-  "image/gif": ".gif",
-};
+export async function POST(req: NextRequest) {
+  try {
+    const { filename, contentType } = await req.json();
 
-export async function POST(request: Request) {
-  const session = await getSession();
-  if (!session?.user || !isAdminUser(session.user)) {
-    return NextResponse.json({ error: "دسترسی مجاز نیست." }, { status: 403 });
+    if (!filename || !contentType) {
+      return NextResponse.json({ error: "اطلاعات فایل ناقص است" }, { status: 400 });
+    }
+
+    // ساخت نام یکتا — فقط پسوند فایل حفظ می‌شود تا URL همیشه ASCII باشد
+    const extension = filename.includes(".") ? filename.slice(filename.lastIndexOf(".")) : "";
+    const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}${extension}`;
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: uniqueFileName,
+      ContentType: contentType,
+    });
+
+    // تولید لینک آپلود مستقیم با اعتبار ۶۰ ثانیه
+    const signedUrl = await getSignedUrl(r2, command, { expiresIn: 60 });
+
+    // لینک نهایی فایل برای نمایش در سایت یا ذخیره در دیتابیس
+    const publicFileUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${uniqueFileName}`;
+
+    return NextResponse.json({ signedUrl, publicFileUrl }, { status: 200 });
+  } catch (error) {
+    console.error("R2 Presign Error:", error);
+    return NextResponse.json({ error: "خطا در ساخت لینک آپلود" }, { status: 500 });
   }
-
-  const formData = await request.formData();
-  const file = formData.get("file");
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "فایلی انتخاب نشده است." }, { status: 400 });
-  }
-
-  const extension = MIME_EXTENSIONS[file.type];
-  if (!extension) {
-    return NextResponse.json(
-      { error: "فرمت مجاز: JPG، PNG، WEBP یا GIF." },
-      { status: 400 },
-    );
-  }
-
-  if (file.size === 0 || file.size > MAX_FILE_SIZE) {
-    return NextResponse.json(
-      { error: "حجم تصویر باید کمتر از ۵ مگابایت باشد." },
-      { status: 400 },
-    );
-  }
-
-  const filename = `${randomUUID()}${extension}`;
-  const directory = path.join(process.cwd(), "public", "img");
-  await mkdir(directory, { recursive: true });
-  await writeFile(path.join(directory, filename), Buffer.from(await file.arrayBuffer()));
-
-  return NextResponse.json({ url: `/img/${filename}` });
 }

@@ -62,17 +62,36 @@ function ProviderDialog({ open, onOpenChange, provider }: { open: boolean; onOpe
                     setUploadError(null);
                     setUploading(true);
                     try {
-                      const uploadData = new FormData();
-                      uploadData.append("file", file);
+                      // ۱. دریافت لینک آپلود موقت از سرور
                       const response = await fetch("/api/uploads", {
                         method: "POST",
-                        body: uploadData,
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          filename: file.name,
+                          contentType: file.type,
+                        }),
                       });
-                      const result = (await response.json()) as { url?: string; error?: string };
-                      if (!response.ok || !result.url) {
-                        throw new Error(result.error ?? "آپلود تصویر ناموفق بود.");
+                      const result = (await response.json()) as {
+                        signedUrl?: string;
+                        publicFileUrl?: string;
+                        error?: string;
+                      };
+                      if (!response.ok || !result.signedUrl || !result.publicFileUrl) {
+                        throw new Error(result.error ?? "دریافت لینک آپلود ناموفق بود.");
                       }
-                      setAvatarUrl(result.url);
+
+                      // ۲. آپلود مستقیم فایل از مرورگر به کلودفلر R2
+                      const uploadRes = await fetch(result.signedUrl, {
+                        method: "PUT",
+                        headers: { "Content-Type": file.type },
+                        body: file,
+                      });
+
+                      if (!uploadRes.ok) {
+                        throw new Error("خطا در ارسال مستقیم تصویر به کلودفلر.");
+                      }
+
+                      setAvatarUrl(result.publicFileUrl);
                     } catch (error) {
                       setUploadError(error instanceof Error ? error.message : "آپلود تصویر ناموفق بود.");
                     } finally {
@@ -81,7 +100,7 @@ function ProviderDialog({ open, onOpenChange, provider }: { open: boolean; onOpe
                   }}
                 />
                 <p className="mt-2 text-xs text-slate-500">
-                  {uploading ? "در حال آپلود..." : "فرمت‌های JPG، PNG، WEBP یا GIF؛ حداکثر ۵ مگابایت"}
+                  {uploading ? "در حال آپلود مستقیم به کلودفلر..." : avatarUrl ? `تصویر انتخاب‌شده: ${avatarUrl}` : "حداکثر ۲۰ مگابایت"}
                 </p>
               </div>
               <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
