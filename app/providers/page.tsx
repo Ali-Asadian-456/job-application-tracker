@@ -7,7 +7,7 @@ import connectDB from "@/lib/db";
 
 export const instant = false;
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE =24;
 
 const benefits = [
   ["دیده شو", "خدماتت را جلوی چشم کسانی قرار بده که به آن نیاز دارند."],
