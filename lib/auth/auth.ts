@@ -3,6 +3,7 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { admin } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 
 const client = new MongoClient(process.env.MONGODB_URI!);
 const db = client.db();
@@ -24,6 +25,7 @@ export const auth = betterAuth({
 
 //to know wheter user logged in or not
 export async function getSession() {
+  await connection();
   const result = await auth.api.getSession({
     headers: await headers(),
   });
