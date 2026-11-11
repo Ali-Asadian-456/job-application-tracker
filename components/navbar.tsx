@@ -50,7 +50,7 @@ export default function Navbar() {
 
           <Link
             href="/providers"
-            className="hidden rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-white outline-none transition-colors hover:border-[#5a3cf5] hover:text-[#5a3cf5] focus-visible:ring-2 focus-visible:ring-[#5a3cf5] sm:inline-block"
+            className=" rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-white outline-none transition-colors hover:border-[#5a3cf5] hover:text-[#5a3cf5] focus-visible:ring-2 focus-visible:ring-[#5a3cf5] inline-block"
           >
             ارائه‌دهندگان خدمات
           </Link>
