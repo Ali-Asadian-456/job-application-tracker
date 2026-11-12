@@ -98,7 +98,7 @@ export default async function ProvidersPage({
 
   return (
     <main dir="rtl" className="tridium-page">
-      <section className="reference-section grid min-h-[460px] grid-cols-1 items-center gap-12 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
+      <section className="reference-section grid min-h-[460px] grid-cols-1 items-center gap-12 pt-15 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
         <div className="max-w-xl">
           <span className="reference-eyebrow">
             <Sparkles className="ml-1 h-3.5 w-3.5 text-[#6957ff]" />

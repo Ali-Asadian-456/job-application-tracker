@@ -33,7 +33,7 @@ export default async function Home() {
   const adminHref = session?.user && isAdminUser(session.user) ? "/management" : "#catalog";
 
   return (
-    <main dir="rtl" className="tridium-page pt-12">
+    <main dir="rtl" className="tridium-page pt-15">
       <section className="hero-shell">
         <div className="hero-copy">
           <span className="reference-eyebrow">نسخه آزمایشی تری‌دیم</span>
