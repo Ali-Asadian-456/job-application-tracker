@@ -110,8 +110,7 @@ export default async function ProvidersPage({
             <span>یک متخصص هست.</span>
           </h1>
           <p className="reference-lede">
-            از طراحی تا ساخت و اجرا، ارائه‌دهندگان خدمات خلاق را پیدا کن و
-            پروژه‌ات را با خیال راحت به آدم‌های درست بسپار.
+خدماتت را پیش روی کسانی قرار بده که به آن نیاز دارند.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link href="#providers" className="light-button bg-[#111216] text-white">

@@ -14,11 +14,12 @@ import SignOutBtn from "./sign-out-btn";
 import AuthDialog from "./auth-dialog";
 import { useSession } from "@/lib/auth/auth-client";
 import { isAdminUser } from "@/lib/auth/roles";
-import { Box } from "lucide-react";
+import { Box, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header
@@ -27,33 +28,43 @@ export default function Navbar() {
     >
       <nav
         aria-label="منوی اصلی"
-        className="mx-auto flex h-[60px] max-w-6xl items-center justify-between rounded-full border border-white/10 bg-black/80 py-0 pe-5 ps-3.5 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.7)] backdrop-blur-xl"
+        className="mx-auto flex flex-row-reverse h-16 max-w-6xl items-center justify-between rounded-full border border-[#e5e2dc] bg-white/90 px-4 shadow-[0_10px_40px_-24px_rgba(17,18,22,0.35)] backdrop-blur-xl sm:px-6"
       >
-        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-1.5 rounded-full text-[20px]  font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#5a3cf5]"
+          className="flex shrink-0 items-center gap-2 rounded-full text-xl font-black text-[#17171a] outline-none focus-visible:ring-2 focus-visible:ring-[#6957ff]"
         >
-          <Box className="h-5 w-5 text-white" />
-          
+          <Box className="h-5 w-5 text-[#6957ff]" />
           تری‌دیم
         </Link>
 
-        {/* Links */}
-        <div className="flex items-center gap-1.5 text-[15px] font-medium">
+        <div className="hidden items-center gap-1.5 text-sm font-medium md:flex">
           <Link
             href="/#catalog"
-            className="rounded-full px-3.5 py-1.5 text-slate-300 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#5a3cf5]  hover:border-[#5a3cf5] "
+            className="rounded-full px-4 py-2 text-[#66636b] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
           >
             محصولات
           </Link>
 
           <Link
             href="/providers"
-            className=" rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-white outline-none transition-colors hover:border-[#5a3cf5] hover:text-[#5a3cf5] focus-visible:ring-2 focus-visible:ring-[#5a3cf5] inline-block"
+            className="rounded-full px-4 py-2 text-[#66636b] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
           >
             ارائه‌دهندگان خدمات
           </Link>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            aria-label={menuOpen ? "بستن منو" : "باز کردن منو"}
+            aria-controls="mobile-navigation"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e2dc] text-[#17171a] outline-none transition-colors hover:bg-[#f1efff] focus-visible:ring-2 focus-visible:ring-[#6957ff] md:hidden"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
 
           {session?.user ? (
             <DropdownMenu>
@@ -64,7 +75,7 @@ export default function Navbar() {
                     role="button"
                     tabIndex={0}
                     aria-label="حساب کاربری"
-                    className="ms-1 cursor-pointer rounded-full outline-none ring-offset-2 transition-shadow hover:ring-2 hover:ring-[#5a3cf5]/40 focus-visible:ring-2 focus-visible:ring-[#5a3cf5] ring-offset-black"
+                    className="cursor-pointer rounded-full outline-none ring-offset-2 ring-offset-white transition-shadow hover:ring-2 hover:ring-[#6957ff]/40 focus-visible:ring-2 focus-visible:ring-[#6957ff]"
                   >
                     <Avatar>
                       {session.user.image ? (
@@ -104,13 +115,33 @@ export default function Navbar() {
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
-              className="rounded-full bg-white px-5 py-2 font-bold text-black outline-none transition-colors hover:bg-[#5a3cf5] hover:text-white focus-visible:ring-2 focus-visible:ring-[#5a3cf5] focus-visible:ring-offset-2"
+              className="cursor-pointer rounded-full bg-[#17171a] px-4 py-2.5 text-xs font-bold text-white outline-none transition-colors hover:bg-[#6957ff] focus-visible:ring-2 focus-visible:ring-[#6957ff] focus-visible:ring-offset-2 sm:px-5 sm:text-sm"
             >
               ورود / ثبت‌نام
             </button>
           )}
         </div>
       </nav>
+
+      <div
+        id="mobile-navigation"
+        className={`${menuOpen ? "flex" : "hidden"} mx-auto mt-2 max-w-6xl flex-col gap-1 rounded-2xl border border-[#e5e2dc] bg-white/95 p-2 shadow-[0_12px_36px_-20px_rgba(17,18,22,0.4)] backdrop-blur-xl md:hidden`}
+      >
+        <Link
+          href="/#catalog"
+          onClick={() => setMenuOpen(false)}
+          className="rounded-xl px-4 py-3 text-sm font-medium text-[#49474a] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+        >
+          محصولات
+        </Link>
+        <Link
+          href="/providers"
+          onClick={() => setMenuOpen(false)}
+          className="rounded-xl px-4 py-3 text-sm font-medium text-[#49474a] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+        >
+          ارائه‌دهندگان خدمات
+        </Link>
+      </div>
 
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
     </header>
