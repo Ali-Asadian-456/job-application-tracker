@@ -28,11 +28,11 @@ export default function Navbar() {
     >
       <nav
         aria-label="منوی اصلی"
-        className="mx-auto flex flex-row-reverse h-16 max-w-6xl items-center justify-between rounded-full border border-[#e5e2dc] bg-white/90 px-4 shadow-[0_10px_40px_-24px_rgba(17,18,22,0.35)] backdrop-blur-xl sm:px-6"
+        className="mx-auto flex flex-row-reverse h-16 max-w-6xl items-center justify-between rounded-full border border-[#323131] bg-[#323131]/95 px-4 shadow-[0_10px_40px_-24px_rgba(17,18,22,0.35)] backdrop-blur-xl sm:px-6"
       >
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 rounded-full text-xl font-black text-[#17171a] outline-none focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+          className="flex shrink-0 items-center gap-2 rounded-full text-xl font-black text-white outline-none focus-visible:ring-2 focus-visible:ring-[#6957ff]"
         >
           <Box className="h-5 w-5 text-[#6957ff]" />
           تری‌دیم
@@ -41,14 +41,14 @@ export default function Navbar() {
         <div className="hidden items-center gap-1.5 text-sm font-medium md:flex">
           <Link
             href="/#catalog"
-            className="rounded-full px-4 py-2 text-[#66636b] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+            className="rounded-full px-4 py-2 text-zinc-300 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#6957ff]"
           >
             محصولات
           </Link>
 
           <Link
             href="/providers"
-            className="rounded-full px-4 py-2 text-[#66636b] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+            className="rounded-full px-4 py-2 text-zinc-300 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#6957ff]"
           >
             ارائه‌دهندگان خدمات
           </Link>
@@ -61,7 +61,7 @@ export default function Navbar() {
             aria-controls="mobile-navigation"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e2dc] text-[#17171a] outline-none transition-colors hover:bg-[#f1efff] focus-visible:ring-2 focus-visible:ring-[#6957ff] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white outline-none transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#6957ff] md:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -115,7 +115,7 @@ export default function Navbar() {
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
-              className="cursor-pointer rounded-full bg-[#17171a] px-4 py-2.5 text-xs font-bold text-white outline-none transition-colors hover:bg-[#6957ff] focus-visible:ring-2 focus-visible:ring-[#6957ff] focus-visible:ring-offset-2 sm:px-5 sm:text-sm"
+              className="cursor-pointer rounded-full bg-white px-4 py-2.5 text-xs font-bold text-[#323131] outline-none transition-colors hover:bg-zinc-200 focus-visible:ring-2 focus-visible:ring-[#6957ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#323131] sm:px-5 sm:text-sm"
             >
               ورود / ثبت‌نام
             </button>
@@ -125,19 +125,19 @@ export default function Navbar() {
 
       <div
         id="mobile-navigation"
-        className={`${menuOpen ? "flex" : "hidden"} mx-auto mt-2 max-w-6xl flex-col gap-1 rounded-2xl border border-[#e5e2dc] bg-white/95 p-2 shadow-[0_12px_36px_-20px_rgba(17,18,22,0.4)] backdrop-blur-xl md:hidden`}
+        className={`${menuOpen ? "flex" : "hidden"} mx-auto mt-2 max-w-6xl flex-col gap-1 rounded-2xl border border-[#323131] bg-[#323131]/95 p-2 shadow-[0_12px_36px_-20px_rgba(17,18,22,0.4)] backdrop-blur-xl md:hidden`}
       >
         <Link
           href="/#catalog"
           onClick={() => setMenuOpen(false)}
-          className="rounded-xl px-4 py-3 text-sm font-medium text-[#49474a] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+          className="rounded-xl px-4 py-3 text-sm font-medium text-zinc-300 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#6957ff]"
         >
           محصولات
         </Link>
         <Link
           href="/providers"
           onClick={() => setMenuOpen(false)}
-          className="rounded-xl px-4 py-3 text-sm font-medium text-[#49474a] outline-none transition-colors hover:bg-[#f1efff] hover:text-[#5140db] focus-visible:ring-2 focus-visible:ring-[#6957ff]"
+          className="rounded-xl px-4 py-3 text-sm font-medium text-zinc-300 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#6957ff]"
         >
           ارائه‌دهندگان خدمات
         </Link>
