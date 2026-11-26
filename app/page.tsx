@@ -36,7 +36,7 @@ export default async function Home() {
     <main dir="rtl" className="tridium-page pt-12">
       <section className="hero-shell">
         <div className="hero-copy">
-          <span className="reference-eyebrow">نسخه آزمایشی تری‌دیم</span>
+          {/* <span className="reference-eyebrow">نسخه آزمایشی تری‌دیم</span> */}
           <h1 className="reference-h1">
             چیزهایی که نمی‌دانستی
             <br />
